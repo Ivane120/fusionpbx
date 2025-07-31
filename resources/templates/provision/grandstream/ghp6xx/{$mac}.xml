@@ -211,7 +211,7 @@
 	{else}{$tp='TCP'}	
 	{/if}	
 {/if}
-		<item name="account.{$line}.sip.transport">$tp</item>
+		<item name="account.{$line}.sip.transport">{$tp}</item>
 
 		<!-- Enable TCP Keep-alive -->
 		<!-- Yes, No -->
@@ -1764,7 +1764,7 @@
 			{if $grandstream_web_access_mode == 2}{$wam='Disabled'}{/if}
 			{if $grandstream_web_access_mode == 3}{$wam='Both'}{/if}
 		{/if}
-		<item name="security.webaccessmode">$wam}</item>
+		<item name="security.webaccessmode">${wam}</item>
 
 		<!-- # Web Access Control.  None, Whitelist, or Blacklist -->
 		<item name="security.webaccesscontrol">None</item>
