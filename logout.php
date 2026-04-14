@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2008-2019
+	Portions created by the Initial Developer are Copyright (C) 2008-2026
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -26,13 +26,25 @@
 
 //includes files
 	require_once __DIR__ . "/resources/require.php";
-	
+
 //use custom logout destination if set otherwise redirect to the index page
-	if (isset($_SESSION["login"]["logout_destination"]["text"])){
-		$logout_destination = $_SESSION["login"]["logout_destination"]["text"];
-	}
-	else {
-		$logout_destination = PROJECT_PATH."/";
+	$logout_destination = $settings->get('login', 'logout_destination', PROJECT_PATH.'/');
+
+//remove remember me token
+	if ($_COOKIE['remember']) {
+		$cookie_selector = explode(":", $_COOKIE['remember'])[0];
+
+		$sql = "update v_user_logs ";
+		$sql .= "set remember_selector = null, ";
+		$sql .= "remember_validator = null ";
+		$sql .= "where remember_selector = :remember_selector ";
+		$parameters['remember_selector'] = $cookie_selector;
+		$database->execute($sql, $parameters);
+		unset($sql, $parameters);
+
+		//unset cookie
+		unset($_COOKIE['remember']);
+		setcookie('remember', '', time() - 3600, '/');
 	}
 
 //destroy session
